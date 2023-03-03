@@ -3,7 +3,9 @@ package com.idat.talleres.logic.service;
 import com.idat.talleres.logic.models.Notas;
 import com.idat.talleres.logic.repository.NotasRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,21 +31,23 @@ public class NotasService {
         return this.repository.save(notas);
     }
 
-    public Notas update(Notas notas) {
-        Notas actualNota = this.repository.findOne(notas.getIdNota());
-        actualNota.setNota1(notas.getNota1());
-        actualNota.setNota2(notas.getNota2());
-        actualNota.setNota3(notas.getNota3());
-        actualNota.setNota4(notas.getNota4());
-        actualNota.setPromedio(notas.getPromedio());
-        actualNota.setIdPeriodo(notas.getIdPeriodo());
-
-        return this.repository.save(notas);
+    public Notas update(Notas notas) throws ResponseStatusException {
+        try {
+            Notas isValidNota = this.repository.findOne(notas.getIdNota());
+            return this.repository.save(notas);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notas's not found");
+        }
 
     }
 
-    public void delete(Integer idNota) {
-        this.repository.deleteById(idNota);
+    public void delete(Integer idNota) throws ResponseStatusException {
+        try {
+            Notas isValidNota = this.repository.findOne(idNota);
+            this.repository.deleteById(idNota);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notas's not found");
+        }
     }
 
 }

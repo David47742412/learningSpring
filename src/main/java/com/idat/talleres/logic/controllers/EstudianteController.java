@@ -32,7 +32,19 @@ public class EstudianteController {
     @PostMapping
     public ResponseEntity<Object> insert(@RequestBody Estudiante estudiante) {
         this.service.insert(estudiante);
-        return new ResponseEntity<>("", )
+        return new ResponseEntity<>("Student create successfully", HttpStatus.OK);
+    }
+
+    @PatchMapping
+    public ResponseEntity<Object> update(@RequestBody Estudiante estudiante) {
+        this.service.update(estudiante);
+        return new ResponseEntity<>("Student update successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{idEstudiante}")
+    public ResponseEntity<Object> delete(@PathVariable Integer idEstudiante) {
+        this.service.delete(idEstudiante);
+        return new ResponseEntity<>("user deleted successfuly", HttpStatus.OK);
     }
 
 }
